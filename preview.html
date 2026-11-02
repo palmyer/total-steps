@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人生总步数 · 手机预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: radial-gradient(1200px 600px at 50% -100px, #16181f 0%, #000 60%);
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-family: -apple-system, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+    padding: 24px 12px;
+  }
+  .caption { color: #48484A; font-size: 12px; letter-spacing: 2px; margin-bottom: 14px; }
+  .caption a { color: #48484A; text-decoration: none; }
+  .caption a:hover { color: #FF9F0A; }
+  .phone {
+    position: relative; width: 392px; height: 780px; background: #000;
+    border: 10px solid #1c2033; border-radius: 44px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65);
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .navbar {
+    flex-shrink: 0; background: rgba(0, 0, 0, 0.75); color: #F5F5F7;
+    text-align: center; padding: 18px 0 12px;
+    font-size: 16px; font-weight: 600; border-bottom: 0.5px solid #2C2C2E;
+  }
+  .screen { flex: 1; overflow: hidden; }
+  .screen iframe { width: 100%; height: 100%; border: none; }
+</style>
+</head>
+<body>
+<div class="caption">人生总步数 · iOS 风格 · <a href="index.html" target="_top">网页版</a></div>
+<div class="phone">
+  <div class="navbar">人生总步数</div>
+  <div class="screen"><iframe src="index.html"></iframe></div>
+</div>
+</body>
+</html>

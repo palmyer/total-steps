@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人生总步数 · 人生可视化</title>
+<link rel="stylesheet" href="shared/theme.css">
+<style>
+  .ms-list { padding: 8px 18px 20px; }
+  .ms-row { margin-bottom: 16px; }
+  .ms-row .cap-line { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+  .ms-row .cap-line .n { color: var(--text); font-weight: 600; }
+  .ms-row .cap-line .p { color: var(--sub); font-variant-numeric: tabular-nums; }
+  .ms-row .bar { height: 10px; background: var(--bg-fill); border-radius: 5px; overflow: hidden; }
+  .ms-row .bar i { display: block; height: 100%; border-radius: 5px; }
+  .lit { color: var(--teal); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="tool-head">
+    <a class="back" href="preview.html" target="_top">📱 手机预览版</a>
+    <h1>人生总步数</h1>
+    <p class="sub">每天的步数是零散数字，一生加总并换算成距离才有画面感</p>
+  </header>
+
+  <section class="card">
+    <div class="card-title">你的数据</div>
+    <div class="field-row"><span class="label">累计步数</span><input type="number" id="steps" min="0" value="30000000"></div>
+    <div class="separator"></div>
+    <div class="field-row"><span class="label">步长（米）</span><input type="number" id="stride" min="0.3" max="1.2" step="0.05" value="0.7"></div>
+    <p class="hint" style="padding-top:10px">手机健康 App 里一般能导出累计步数（Apple 健康 / 小米运动 / 微信运动）。</p>
+  </section>
+
+  <section class="card" id="resultCard"></section>
+  <section class="card"><div class="card-title">里程碑</div><div class="ms-list" id="msList"></div></section>
+
+  <p class="hint" style="text-align:center">你已经走了很远，比你想的远。</p>
+</div>
+
+<script src="shared/core.js"></script>
+<script>
+var MILESTONES = [
+  { name: '北京 → 上海', km: 1214, color: 'var(--yellow)' },
+  { name: '横穿中国（东西）', km: 5200, color: 'var(--green)' },
+  { name: '绕地球一圈', km: 40075, color: 'var(--teal)' },
+  { name: '到月球', km: 384400, color: 'var(--purple)' }
+];
+
+function render() {
+  var steps = parseFloat(document.getElementById('steps').value) || 0;
+  var stride = parseFloat(document.getElementById('stride').value) || 0.7;
+  var km = steps * stride / 1000;
+
+  var s = LGF.computeLife(LGF.getBirthday(), LGF.getLifespan());
+  var dailyAvg = s.daysLived > 0 ? steps / s.daysLived : 0;
+  var futureKm = s.remainingDays * dailyAvg * stride / 1000;
+
+  document.getElementById('resultCard').innerHTML =
+    '<div class="stat-cap">你已经走出</div>' +
+    '<div class="stat-big">' + LGF.fmt(Math.round(km)) + '<span class="stat-unit">km</span></div>' +
+    '<div class="progress-track"><div class="progress-fill" style="width:' + Math.min(100, km / 384400 * 100) + '%"></div></div>' +
+    '<div class="stat-cells">' +
+      '<div class="stat-cell"><div class="num">' + LGF.fmt(Math.round(steps)) + '</div><div class="cap">累计步数</div></div>' +
+      '<div class="stat-cell"><div class="num">' + Math.round(dailyAvg) + '</div><div class="cap">日均步数</div></div>' +
+      '<div class="stat-cell"><div class="num">' + LGF.fmt(Math.round(futureKm)) + ' km</div><div class="cap">余生照此还能走</div></div>' +
+    '</div>' +
+    '<div class="stat-foot">余生额度 ≈ 再绕地球 ' + (futureKm / 40075).toFixed(2) + ' 圈</div>';
+
+  document.getElementById('msList').innerHTML = MILESTONES.map(function (m) {
+    var pct = Math.min(100, km / m.km * 100);
+    var lit = km >= m.km;
+    return '<div class="ms-row">' +
+      '<div class="cap-line"><span class="n' + (lit ? ' lit' : '') + '">' + (lit ? '✓ ' : '') + m.name + '</span>' +
+      '<span class="p">' + pct.toFixed(1) + '% · ' + LGF.fmt(m.km) + ' km' + (lit ? '' : '，还差 ' + LGF.fmt(Math.round(m.km - km)) + ' km') + '</span></div>' +
+      '<div class="bar"><i style="width:' + pct + '%;background:' + m.color + '"></i></div></div>';
+  }).join('');
+}
+
+document.getElementById('steps').addEventListener('input', render);
+document.getElementById('stride').addEventListener('input', render);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+/* iOS 风格滚轮选择器样式（web/index.html 与 preview.html 共用）
+   定位方式：默认全屏 fixed 居中；手机壳预览在页面内用 .phone 前缀覆盖 */
+
+.sheet-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.sheet-mask.show { opacity: 1; pointer-events: auto; }
+
+.sheet {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 101;
+  width: min(430px, 100%);
+  background: #1C1C1E;
+  border-radius: 14px 14px 0 0;
+  transform: translate(-50%, 105%);
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+  padding-bottom: 14px;
+}
+.sheet.show { transform: translate(-50%, 0); }
+
+.grabber {
+  width: 36px; height: 5px; border-radius: 2.5px;
+  background: #5A5A5E; margin: 8px auto 2px;
+}
+.sheet-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 16px 2px;
+}
+.sheet-title { font-size: 16px; font-weight: 600; color: #F5F5F7; }
+.done-btn {
+  color: #FF9F0A; font-size: 15px; font-weight: 600;
+  background: none; border: none; cursor: pointer;
+  font-family: inherit; padding: 4px 2px;
+}
+
+.wheel-wrap {
+  position: relative; height: 216px; overflow: hidden;
+}
+.wheel-mask-top, .wheel-mask-bottom {
+  position: absolute; left: 0; right: 0; height: 60px;
+  pointer-events: none; z-index: 3;
+}
+.wheel-mask-top { top: 0; background: linear-gradient(#1C1C1E 12%, rgba(28, 28, 30, 0)); }
+.wheel-mask-bottom { bottom: 0; background: linear-gradient(rgba(28, 28, 30, 0), #1C1C1E 88%); }
+.wheel-band {
+  position: absolute; left: 14px; right: 14px; top: calc(50% - 24px); height: 48px;
+  border-top: 0.5px solid #48484A; border-bottom: 0.5px solid #48484A;
+  border-radius: 8px; background: rgba(255, 255, 255, 0.045);
+  pointer-events: none; z-index: 2;
+}
+.wheel-row { display: flex; height: 100%; }
+.wheel-col {
+  flex: 1; height: 100%; overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.wheel-col::-webkit-scrollbar { display: none; }
+.wheel-item {
+  height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 21px; color: #8E8E93;
+  scroll-snap-align: center;
+  will-change: transform, opacity;
+  white-space: nowrap;
+}
+.wheel-spacer { height: 84px; }
